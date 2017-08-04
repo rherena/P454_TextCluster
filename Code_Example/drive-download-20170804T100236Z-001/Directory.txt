@@ -1,0 +1,48 @@
+Directory
+
+
+
+berniesanders_tweets.csv - raw data from Sanders' twitter
+
+Clinton_emotions.pdf - visualization of Clinton's tweets in terms of emotion conveyed
+
+Clinton_pos_neg.pdf - visualization of Clinton's tweets in terms of poisitve and negative words
+
+Clinton_wordcloud.pdf - word cloud of common terms used by Clinton on twitter
+
+clintontweets_dtm.csv - Data frame from the document term matrix of the pre-processed Clinton twitter data
+
+hillaryclinton_tweets.csv - raw data from Clinton's twitter
+
+NRC_emotion_lexicon - Lexicon downloaded from National Research Council Canada showing emotions associated with English words
+
+
+Quinn_IA2_Code.txt - Plain text file of the R code used
+
+
+
+Quinn_IA2_Code.R - R code used
+
+
+
+Quinn_IA2_Report.pdf - Management report
+
+realdonaldtrump_tweets.csv - raw data from Trump's twitter
+
+Sanders_emotions.pdf - visualization of Sanders' tweets in terms of emotion conveyed
+
+Sanders_pos_neg.pdf - visualization of Sanders' tweets in terms of poisitve and negative words
+
+Sanders_wordcloud.pdf - word cloud of common terms used by Sanders on twitter
+
+sanderstweets_dtm.csv - Data frame from the document term matrix of the pre-processed Sanders twitter data
+
+Trump_emotions.pdf - visualization of Trump's tweets in terms of emotion conveyed
+
+Trump_pos_neg.pdf - visualization of Trump's tweets in terms of poisitve and negative words
+
+Trump_wordcloud.pdf - word cloud of common terms used by Trump on twitter
+
+trumptweets_dtm.csv - Data frame from the document term matrix of the pre-processed Trump twitter data
+
+

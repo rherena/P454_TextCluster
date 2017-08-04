@@ -1,0 +1,63 @@
+---
+title: "WordCloud"
+author: "Ricardo Herena"
+date: "8/4/2017"
+output: html_document
+---
+
+## Coding Examples from website:
+
+http://www.sthda.com/english/wiki/text-mining-and-word-cloud-fundamentals-in-r-5-simple-steps-you-should-know
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Library,echo = FALSE}
+
+
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+setwd("~/Documents/Text Analysis Pred 453/P454_TextCluster/Code_Example")
+
+
+```
+
+First we read the text. We can do this using read lines and a saved txt file. 
+
+```{r read_text}
+
+
+fname <- paste(getwd(),'/','MLK_Dream.txt', sep = '')
+text <- readLines(fname, skipNul = F)
+docs <- Corpus(VectorSource(text))
+
+```
+
+Below is the full text. 
+
+```{r inspection}
+
+inspect(docs)
+
+
+```
+
+```{r termfreq}
+
+docs <- tm_map(docs, stripWhitespace)
+docs <- tm_map(docs, stemDocument)
+excl <- c("the", "and","that","this","with","our","have","from","not","one")
+docs <- tm_map(docs, removeWords, excl) 
+
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 10)
+
+```
+
