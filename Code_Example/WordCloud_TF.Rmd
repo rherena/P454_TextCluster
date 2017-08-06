@@ -46,11 +46,17 @@ inspect(docs)
 
 ```
 
+Next we will stem the words, strip whitespace
+
 ```{r termfreq}
 
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+docs <- tm_map(docs, toSpace, "”")
 docs <- tm_map(docs, stripWhitespace)
 docs <- tm_map(docs, stemDocument)
-excl <- c("the", "and","that","this","with","our","have","from","not","one")
+docs <- tm_map(docs, removeWords, stopwords("english"))
+excl <- c("the", "and","that","this","with","our","have","from","not","one","for")
 docs <- tm_map(docs, removeWords, excl) 
 
 dtm <- TermDocumentMatrix(docs)
@@ -58,6 +64,46 @@ m <- as.matrix(dtm)
 v <- sort(rowSums(m),decreasing=TRUE)
 d <- data.frame(word = names(v),freq=v)
 head(d, 10)
+
+```
+
+
+```{r wordcloud}
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+
+```
+
+
+Next we can explore terms and their associations. We can see which words are associated with each other. 
+
+```{r termfreq_assoc}
+
+findFreqTerms(dtm, lowfreq = 4)
+findAssocs(dtm, terms = "freedom", corlimit = 0.3)
+
+```
+
+Finally a simple plot
+
+```{r plot}
+
+barplot(d[1:10,]$freq, las = 2, names.arg = d[1:10,]$word,
+        col ="lightblue", main ="Most frequent words",
+        ylab = "Word frequencies")
+
+```
+
+First we normalize the data then apply kmeans and hclust
+
+```{r kmeans}
+
+library(cluster)
+m_n <- t(apply(m, 1, function(x)(x)/(sum(x))))
+hclust <- agnes(x = m_n, method = "complete")
+plot(hclust, which.plots = 2, main = "", sub = "", xlab = "")
 
 ```
 

@@ -1,0 +1,89 @@
+---
+title: "Clust_01"
+author: "Ricardo Herena"
+date: "8/5/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/Text Analysis Pred 453/P454_TextCluster")
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+library(cluster)
+```
+
+
+```{r read_data}
+
+c_m = read.csv("Conc_Matrix.csv", sep=",", row.names=1)
+c_m <- as.matrix(c_m)
+d_m <- dist(c_m, method="euclidean")
+
+```
+
+Below are some word clouds. We can use these to understand our matrix from a high level. We can also compute tf-idf for word clouds. 
+
+```{r tf-idf-wordclouds}
+
+#tf-idf totals for plotting
+v <- sort(rowSums(c_m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+
+
+```
+
+Hierarchical Clustering
+
+We can see various clusters emerging from our Hclust. We write this to a PDF. A we can see there are many clusters that stem from the top. Our initial guess is something like 10-20 clusters. 
+
+```{r hclust1}
+
+DSI_label <- 1:40
+
+hcl <- hclust(d_m)
+
+plot(hcl)
+
+pdf("hcl.pdf", width=40, height=15)
+plot(hcl)
+dev.off()
+
+```
+
+We make 3 table files with potential 1st pass clusters. We start with 10, 20, and 30 clusters. 
+
+```{r hclust2}
+
+nclust <- 10
+
+t <- table(d$word, cutree(hcl, nclust))
+t2 <- table(d$word, cutree(hcl, nclust + 10))
+t3 <- table(d$word, cutree(hcl, nclust + 20))
+
+colSums(t)
+
+colSums(t2)
+
+colSums(t3)
+
+write.csv(t, paste("H_clust_firstpass",nclust, ".csv", sep = ""))
+write.csv(t2, paste("H_clust_firstpass",nclust+10, ".csv", sep = ""))
+write.csv(t3, paste("H_clust_firstpass",nclust+20, ".csv", sep = ""))
+
+```
+
+
+
+
+
+
+
+
