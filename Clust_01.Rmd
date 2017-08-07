@@ -59,7 +59,7 @@ dev.off()
 hcl2 <- hclust(dsi_m)
 plot(hcl2)
 
-pdf("hcl2.pdf", width=40, height=15)
+pdf("hcl2.png", width=40, height=15)
 plot(hcl2)
 dev.off()
 
