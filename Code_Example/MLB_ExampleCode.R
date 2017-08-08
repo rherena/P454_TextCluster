@@ -23,7 +23,7 @@ docs <- tm_map(docs, removeWords, stopwords("SMART")) #Removing stopwords - to s
 # Removing all special characters - keeps alpha-numeric characters only removeSpecialChars <- function(x) gsub("[^a-zA-Z0-9 ]","",x)
 docs <- tm_map(docs, content_transformer(removeSpecialChars))
 # docs <- tm_map(docs, removeWords, c("also","said")) # Code for removing additonal words (also and said are removed by SMART)
-SENTIMENT ANALYSIS – HERO REPORT 17
+
 # Code for keeping words together/creating an equivalence class - add additional lines as necessary
 docs <- tm_map(docs, content_transformer(gsub), pattern = "barak obama", replacement = "obama")
 docs <- tm_map(docs, content_transformer(gsub), pattern = "hillary clinton", replacement = "hclinton")
@@ -34,7 +34,8 @@ docs <- tm_map(docs, content_transformer(gsub), pattern = "donald trump", replac
 docs <- tm_map(docs, content_transformer(gsub), pattern = "mr sanders", replacement = "bsanders")
 docs <- tm_map(docs, content_transformer(gsub), pattern = "bernie sanders", replacement = "bsanders")
 docs <- tm_map(docs, content_transformer(gsub), pattern = "marco rubio", replacement = "mrubio")
-docs <- tm_map(docs, content_transformer(gsub), pattern = "ted cruz", replacement = "tcruz") docs <- tm_map(docs, content_transformer(gsub), pattern = "emails", replacement = "email")
+docs <- tm_map(docs, content_transformer(gsub), pattern = "ted cruz", replacement = "tcruz") 
+docs <- tm_map(docs, content_transformer(gsub), pattern = "emails", replacement = "email")
 ## A more efficient way for creating equivalence classes but loses the DSI ID in the process # for (j in seq(docs))
 #{
 # docs[[j]] <- gsub("barak obama", "obama", docs[[j]])
@@ -60,7 +61,9 @@ dtm
 inspect(dtm[1:5, 1:20]) # taking a look at the first 20 terms in the first 5 DSIs
 tdm <- TermDocumentMatrix(docs) # Creates the term document matrix tdm
 inspect(tdm[1:5, 1:20]) # taking a look at the first 5 terms in the first 20 DSIs
-# Common and Uncommon Words freq <- colSums(as.matrix(dtm)) length(freq)
+# Common and Uncommon Words 
+freq <- colSums(as.matrix(dtm)) 
+length(freq)
 ord <- order(freq)
 freq[head(ord)] # Uncommon words freq[tail(ord)] # Common words
 # # Eliminating Sparse Terms
