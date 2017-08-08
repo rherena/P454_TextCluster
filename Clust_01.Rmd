@@ -18,8 +18,7 @@ library(cluster)
 
 ```{r read_data}
 
-c_m = read.csv("Conc_Matrix.csv", sep=",", row.names=1)
-c_m <- as.matrix(c_m)
+c_m = read.csv("dtms.csv", sep=",", row.names=1)
 dsi_m <- t(c_m)
 d_m <- dist(c_m, method="euclidean")
 dsi_m <- dist(dsi_m, method="euclidean")
@@ -59,31 +58,54 @@ dev.off()
 hcl2 <- hclust(dsi_m)
 plot(hcl2)
 
-pdf("hcl2.png", width=40, height=15)
+pdf("hcl2.pdf", width=40, height=15)
 plot(hcl2)
 dev.off()
 
 ```
 
-We make 3 table files with potential 1st pass clusters. We start with 10, 20, and 30 clusters. These represent clusters of words, rather than DSI's which we will cluster below. 
-We also put these into four main clusters. All of these are summarized below. 
+We now are able to cluster both concepts and DSI's. For simplicity we can cluster our DSI's into 3 buckets, with 1 bucket being a catch all. We summarise which would be in each bucket, and the bucket totals below. 
+
+From the looks of things 3 clusters seems about right for DSI's. As for terms we start at roughly 10, which is very clumped together, but as we widen out to roughly 20 clusters our first few seem to be nicely distributed, with few clusters with only 1 term. 
+
+30 clusters for terms seems to be to many. 
+
+
 
 ```{r hclust2}
 
 nclust <- 10
 
+
+t0 <- table(d$word, cutree(hcl, 3))
 t <- table(d$word, cutree(hcl, nclust))
 t2 <- table(d$word, cutree(hcl, nclust + 10))
 t3 <- table(d$word, cutree(hcl, nclust + 20))
 
-t4 <- table(cutree(hcl2, 10),colnames(c_m))
+## DSI clusters sums
 
-rowSums(t4)
+cutree(hcl2, 3)
+rowSums(table(cutree(hcl2, 3),colnames(c_m)))
+
+cutree(hcl2, 4)
+rowSums(table(cutree(hcl2, 4),colnames(c_m)))
+
+## Keyword concept clusters 
+
+colSums(t, 1:nclust)
+
+colSums(t2, 1:nclust+10)
+
+colSums(t3, 1:nclust+20)
 
 ### DSI clusters
-write.csv(t4, paste("H_clustDSI_firstpass", ".csv", sep = ""))
+write.csv(table(cutree(hcl2, 3),colnames(c_m)),
+          paste("H_clustDSI_firstpass", ".csv", sep = ""))
 
-write.csv(t3, paste("H_clust_firstpass",nclust+20, ".csv", sep = ""))
+
+write.csv(t2,
+          paste("H_TERMS_firstpass", ".csv", sep = ""))
+
 
 ```
 
