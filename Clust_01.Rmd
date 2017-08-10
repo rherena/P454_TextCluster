@@ -86,8 +86,8 @@ rowSums(table(cutree(hcl2, 15),colnames(c_m)))
 
 
 ### DSI clusters
-write.csv(table(cutree(hcl2, 3),colnames(c_m)),
-          paste("H_clustDSI_firstpass", ".csv", sep = ""))
+write.csv(table(cutree(hcl2, 12),colnames(c_m)),
+          paste("H_clustDSI", ".csv", sep = ""))
 
 
 
