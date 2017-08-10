@@ -64,33 +64,44 @@ dev.off()
 
 ```
 
-We now are able to cluster both concepts and DSI's. For simplicity we can cluster our DSI's into 3 buckets, with 1 bucket being a catch all. We summarise which would be in each bucket, and the bucket totals below. 
-
-From the looks of things 3 clusters seems about right for DSI's. As for terms we start at roughly 10, which is very clumped together, but as we widen out to roughly 20 clusters our first few seem to be nicely distributed, with few clusters with only 1 term. 
-
-30 clusters for terms seems to be to many. 
-
+Given that we are most interested in clustering DSI's, we can see roughly 10 clusters for DSI's. Below we present tables for how many DSI's end up in clusters for clusters 10:15. It seems there are diminishing returns for more than 12 clusters in terms of being well distributed. 
 
 
 ```{r hclust2}
 
+## DSI clusters sums
+
+
+rowSums(table(cutree(hcl2, 10),colnames(c_m)))
+
+rowSums(table(cutree(hcl2, 11),colnames(c_m)))
+
+rowSums(table(cutree(hcl2, 12),colnames(c_m)))
+
+rowSums(table(cutree(hcl2, 13),colnames(c_m)))
+
+rowSums(table(cutree(hcl2, 14),colnames(c_m)))
+
+rowSums(table(cutree(hcl2, 15),colnames(c_m)))
+
+
+### DSI clusters
+write.csv(table(cutree(hcl2, 3),colnames(c_m)),
+          paste("H_clustDSI_firstpass", ".csv", sep = ""))
+
+
+
+```
+
+
+```{r keywords}
+
+## Keyword concept clusters 
 nclust <- 10
 
-
-t0 <- table(d$word, cutree(hcl, 3))
 t <- table(d$word, cutree(hcl, nclust))
 t2 <- table(d$word, cutree(hcl, nclust + 10))
 t3 <- table(d$word, cutree(hcl, nclust + 20))
-
-## DSI clusters sums
-
-cutree(hcl2, 3)
-rowSums(table(cutree(hcl2, 3),colnames(c_m)))
-
-cutree(hcl2, 4)
-rowSums(table(cutree(hcl2, 4),colnames(c_m)))
-
-## Keyword concept clusters 
 
 colSums(t, 1:nclust)
 
@@ -98,18 +109,12 @@ colSums(t2, 1:nclust+10)
 
 colSums(t3, 1:nclust+20)
 
-### DSI clusters
-write.csv(table(cutree(hcl2, 3),colnames(c_m)),
-          paste("H_clustDSI_firstpass", ".csv", sep = ""))
-
 
 write.csv(t2,
           paste("H_TERMS_firstpass", ".csv", sep = ""))
 
 
 ```
-
-
 
 
 
