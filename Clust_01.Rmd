@@ -160,14 +160,14 @@ wss <- 2:31
 for (i in 2:31){
   wss[i] <- sum(kmeans(dsi_m,centers=i,nstart=25)$withinss)}
 
-pdf("elbow_plot.pdf", width=40, height=15)
+png("elbow_plot.png", width=800, height=600)
 plot(2:31, wss[2:31], type="b", xlab="Number of Clusters", ylab="Within groups sum of squares",
 main="DSI Clusters")
 dev.off()
 
 dsikfit <- kmeans(dsi_m, 12) # Creating clusters
 
-pdf("cluster_distplot_fp.pdf", width=40, height=15)
+png("cluster_distplot_fp.png", width=800, height=600)
 clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
          labels=2, lines=0, main="Bag of Words DSI Clusters")
 dev.off()
@@ -175,7 +175,7 @@ dev.off()
 
 dsikfit <- kmeans(dsi_m, 6) # Creating clusters
 
-pdf("cluster_distplot_sp.pdf", width=40, height=15)
+png("cluster_distplot_sp.png", width=800, height=600)
 clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
          labels=2, lines=0, main="Bag of Words DSI Clusters")
 dev.off()
@@ -202,7 +202,7 @@ ldaOut.topics <- as.matrix(topics(LDAmodel))
 ldaOut.terms <- as.matrix(terms(LDAmodel,10)) 
 # Top 6 terms by Topic ldaOut.terms
 
-
+write.csv(ldaOut.terms, 'lda_terms.csv')
 
 
 
