@@ -38,7 +38,6 @@ wordcloud(words = d$word, freq = d$freq, min.freq = 1,
           max.words=200, random.order=FALSE, rot.per=0.35, 
           colors=brewer.pal(8, "Dark2"))
 
-
 ```
 
 Hierarchical Clustering
@@ -90,11 +89,13 @@ write.csv(table(cutree(hcl2, 12),colnames(c_m)),
           paste("H_clustDSI", ".csv", sep = ""))
 
 
+dsi_t <- t(table(cutree(hcl2, 12),colnames(c_m)))
+dsi_t <- data.frame(dsi_t, stringsAsFactors = F)
 
 ```
 
 
-```{r keywords}
+```{r keywords, include=FALSE}
 
 ## Keyword concept clusters 
 nclust <- 10
@@ -112,12 +113,99 @@ colSums(t3, 1:nclust+20)
 
 write.csv(t2,
           paste("H_TERMS_firstpass", ".csv", sep = ""))
+```
+
+
+
+```{r clustvis1}
+
+pdf("hcl2_fpc.pdf", width=40, height=15)
+plot(hcl2, hang=-1) 
+groups <- cutree(hcl2, k=4) 
+rect.hclust(hcl2, k=12, border="red")
+dev.off()
+
+
+```
+
+```{r ctable}
+
+max <- max(rowSums(table(cutree(hcl2, 12),colnames(c_m))))
+c_table <- data.frame(matrix(NA, nrow = max, ncol = 12))
+vi <- 1
+col <- 1 
+col2 <- 2
+for(i in 1:nrow(dsi_t)) {
+    col <- as.numeric(paste(dsi_t[i,2]))
+    if (col != col2){
+      vi = 1
+      }  
+    
+    if (dsi_t[i,3] == 1){
+      c_table[vi,col] = paste(dsi_t[i,1])
+      vi = vi + 1}
+    col2 <- as.numeric(paste(dsi_t[i,2]))
+    # do stuff with row
+
+}
+
+write.csv(c_table, "cluster_table_fpass.csv")
+
+```
+
+```{r kmeans elbow}
+
+library(fpc)
+wss <- 2:31
+for (i in 2:31){
+  wss[i] <- sum(kmeans(dsi_m,centers=i,nstart=25)$withinss)}
+
+pdf("elbow_plot.pdf", width=40, height=15)
+plot(2:31, wss[2:31], type="b", xlab="Number of Clusters", ylab="Within groups sum of squares",
+main="DSI Clusters")
+dev.off()
+
+dsikfit <- kmeans(dsi_m, 12) # Creating clusters
+
+pdf("cluster_distplot_fp.pdf", width=40, height=15)
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="Bag of Words DSI Clusters")
+dev.off()
+
+
+dsikfit <- kmeans(dsi_m, 6) # Creating clusters
+
+pdf("cluster_distplot_sp.pdf", width=40, height=15)
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="Bag of Words DSI Clusters")
+dev.off()
 
 
 ```
 
 
 
+```{r LDA}
 
 
+library(topicmodels)
+burnin <- 500
+iter <- 1000 
+keep <- 30
+k <- 6
+LDAmodel <- LDA(dtm, k,
+method="Gibbs",
+control = list(burnin=burnin,
+iter=iter, keep=keep))
+ldaOut.topics <- as.matrix(topics(LDAmodel)) 
+# DSIs by Topic ldaOut.topics
+ldaOut.terms <- as.matrix(terms(LDAmodel,10)) 
+# Top 6 terms by Topic ldaOut.terms
+
+
+
+
+
+
+```
 
