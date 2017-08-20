@@ -4,10 +4,12 @@ library("wordcloud")
 library("RColorBrewer")
 setwd("~/Documents/Text Analysis Pred 453/P454_TextCluster/")
 
-
+# Use to create DSI group
+# Also code commented out for cluster creation
 cname <- file.path("DSI") 
-dir(cname) 
-corp <- Corpus(DirSource(cname)) 
+fnames <- DirSource(cname)
+#fnames$filelist <- paste('DSI/',c4, sep = '')
+corp <- Corpus(fnames) 
 docs <- corp 
 DSIList <- summary(docs)
 
@@ -44,3 +46,4 @@ dtms <- removeSparseTerms(dtm, .75) # This makes a matrix that is 70% empty spac
 inspect(dtms)
 dtms <- t(as.matrix(dtms))
 write.csv(dtms, "dtms.csv")
+#write.csv(dtms, "dtms_clusters/dtms_c4.csv")

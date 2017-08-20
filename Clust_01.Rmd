@@ -29,6 +29,7 @@ Below are some word clouds. We can use these to understand our matrix from a hig
 
 ```{r tf-idf-wordclouds}
 
+
 #tf-idf totals for plotting
 v <- sort(rowSums(c_m),decreasing=TRUE)
 d <- data.frame(word = names(v),freq=v)
@@ -198,9 +199,60 @@ ldaOut.terms <- as.matrix(terms(LDAmodel,10))
 # Top 6 terms by Topic ldaOut.terms
 
 write.csv(ldaOut.terms, 'lda_terms.csv')
+```
+
+```{r cluster_analysis_distM}
+c_table <- read.csv("cluster_table_sp.csv")
+
+c1 <- as.vector(c_table$X1)[!is.na(as.vector(c_table$X1))]
+c2 <- as.vector(c_table$X2)[!is.na(as.vector(c_table$X2))]
+c3 <- as.vector(c_table$X3)[!is.na(as.vector(c_table$X3))]
+c4 <- as.vector(c_table$X4)[!is.na(as.vector(c_table$X4))]
 
 
+```
 
+
+```{r cluster_analysis_c1}
+
+cm = read.csv("dtms_clusters/dtms_c1.csv", sep=",", row.names=1)
+dsim <- t(cm)
+dm <- dist(cm, method="euclidean")
+dsim <- dist(dsim, method="euclidean")
+
+v <- sort(rowSums(cm),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+
+set.seed(1234)
+png("dtms_clusters/c1_wc.png", width=800, height=600)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=50, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+dev.off()
+
+d[1:20,]
+write.csv(d[1:20,], "dtms_clusters/c1_term.csv")
+
+```
+
+```{r cluster_analysis_c2}
+cm = read.csv("dtms_clusters/dtms_c2.csv", sep=",", row.names=1)
+dsim <- t(cm)
+dm <- dist(cm, method="euclidean")
+dsim <- dist(dsim, method="euclidean")
+
+v <- sort(rowSums(cm),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+
+set.seed(1234)
+png("dtms_clusters/c2_wc.png", width=800, height=600)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=50, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+dev.off()
+
+d[1:10,]
+write.csv(d[1:10,], "dtms_clusters/c2_term.csv")
 
 ```
 
