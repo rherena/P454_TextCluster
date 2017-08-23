@@ -226,7 +226,7 @@ d <- data.frame(word = names(v),freq=v)
 set.seed(1234)
 png("dtms_clusters/c1_wc.png", width=800, height=600)
 wordcloud(words = d$word, freq = d$freq, min.freq = 1,
-          max.words=50, random.order=FALSE, rot.per=0.35, 
+          max.words=100, random.order=FALSE, rot.per=0.35, 
           colors=brewer.pal(8, "Dark2"))
 dev.off()
 
@@ -247,12 +247,57 @@ d <- data.frame(word = names(v),freq=v)
 set.seed(1234)
 png("dtms_clusters/c2_wc.png", width=800, height=600)
 wordcloud(words = d$word, freq = d$freq, min.freq = 1,
-          max.words=50, random.order=FALSE, rot.per=0.35, 
+          max.words=100, random.order=FALSE, rot.per=0.35, 
           colors=brewer.pal(8, "Dark2"))
 dev.off()
 
-d[1:10,]
-write.csv(d[1:10,], "dtms_clusters/c2_term.csv")
+d[1:20,]
+write.csv(d[1:20,], "dtms_clusters/c2_term.csv")
 
 ```
+
+
+```{r cluster_analysis_c3}
+cm = read.csv("dtms_clusters/dtms_c3.csv", sep=",", row.names=1)
+dsim <- t(cm)
+dm <- dist(cm, method="euclidean")
+dsim <- dist(dsim, method="euclidean")
+
+v <- sort(rowSums(cm),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+
+set.seed(1234)
+png("dtms_clusters/c3_wc.png", width=800, height=600)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+dev.off()
+
+d[1:20,]
+write.csv(d[1:20,], "dtms_clusters/c3_term.csv")
+
+```
+
+```{r cluster_analysis_c4}
+cm = read.csv("dtms_clusters/dtms_c4.csv", sep=",", row.names=1)
+dsim <- t(cm)
+dm <- dist(cm, method="euclidean")
+dsim <- dist(dsim, method="euclidean")
+
+v <- sort(rowSums(cm),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+
+set.seed(1234)
+png("dtms_clusters/c4_wc.png", width=800, height=600)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+dev.off()
+
+d[1:20,]
+write.csv(d[1:20,], "dtms_clusters/c4_term.csv")
+
+```
+
+
 

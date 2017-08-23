@@ -1,0 +1,93 @@
+---
+title: "RTV_Clusters_FinalPass"
+author: "Ricardo Herena"
+date: "8/23/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("~/Documents/Text Analysis Pred 453/P454_TextCluster")
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+library(cluster)
+```
+
+```{r read_RTV}
+
+c_m = read.csv("./RTVs/C2Co9_RTV_Matrix v2_AT_LF_2017-08-22.csv", sep=",", row.names = 1)
+dsi_m <- t(c_m)
+dsi_m <- dist(dsi_m, method="euclidean")
+
+
+```
+
+
+It looks like 4-5 clusters are optimal using th elbow plot. Most likely 4 will be the best number using Kmeans.
+
+```{r elbow_plot}
+
+library(fpc)
+wss <- 2:31
+for (i in 2:31){
+  wss[i] <- sum(kmeans(dsi_m,centers=i,nstart=25)$withinss)}
+
+png("elbow_plot_RTV.png", width=800, height=600)
+plot(2:31, wss[2:31], type="b", xlab="Number of Clusters", ylab="Within groups sum of squares",
+main="DSI Clusters")
+dev.off()
+
+plot(2:31, wss[2:31], type="b", xlab="Number of Clusters", ylab="Within groups sum of squares",
+main="DSI Clusters")
+
+
+```
+
+After Testing 5, 4 and 3 DSI clusters, we can see 4 clusters seem to fit the data nicely. 
+
+```{r cluster_test}
+
+dsikfit <- kmeans(dsi_m, 5) # Creating clusters
+
+
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="RTV 5 DSI Clusters")
+
+
+
+dsikfit <- kmeans(dsi_m, 4) # Creating clusters
+
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="RTV 4 DSI Clusters")
+
+png("cluster_distplot_RTV_fp.png", width=800, height=600)
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="RTV 4 DSI Clusters")
+dev.off()
+
+dsikfit <- kmeans(dsi_m, 3) # Creating clusters
+
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="RTV 3 DSI Clusters")
+
+
+```
+
+```{r writecluster_names}
+
+DSI_name = read.csv("./DSI/DSI_Names.csv", sep=",")
+
+dsikfit <- kmeans(dsi_m, 4)
+dsi_t <- data.frame(dsikfit$cluster)
+dsi_t$name <- DSI_name$Title
+dsi_t$DSI_num <- DSI_name$DSI.number
+
+
+
+write.csv(dsi_t, "cluster_table_RTV_final.csv")
+
+```
+
