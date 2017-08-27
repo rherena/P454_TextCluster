@@ -49,7 +49,7 @@ main="DSI Clusters")
 After Testing 5, 4 and 3 DSI clusters, we can see 4 clusters seem to fit the data nicely. 
 
 ```{r cluster_test}
-
+set.seed(123)
 dsikfit <- kmeans(dsi_m, 5) # Creating clusters
 
 
@@ -74,13 +74,22 @@ clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
          labels=2, lines=0, main="RTV 3 DSI Clusters")
 
 
+dsikfit <- kmeans(dsi_m, 7) # Creating clusters consistent w heirarchical.
+
+png("cluster_distplot_RTV_HCFP.png", width=800, height=600)
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="RTV 7 DSI Clusters ")
+dev.off()
+
+clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
+         labels=2, lines=0, main="RTV 7 DSI Clusters ")
+
 ```
 
 ```{r writecluster_names}
 
 DSI_name = read.csv("./DSI/DSI_Names.csv", sep=",")
 
-dsikfit <- kmeans(dsi_m, 4)
 dsi_t <- data.frame(dsikfit$cluster)
 dsi_t$name <- DSI_name$Title
 dsi_t$DSI_num <- DSI_name$DSI.number
@@ -90,4 +99,8 @@ dsi_t$DSI_num <- DSI_name$DSI.number
 write.csv(dsi_t, "cluster_table_RTV_final.csv")
 
 ```
+
+
+
+
 

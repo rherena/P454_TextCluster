@@ -35,9 +35,13 @@ v <- sort(rowSums(c_m),decreasing=TRUE)
 d <- data.frame(word = names(v),freq=v)
 
 set.seed(1234)
+png("Bag_of_Words_Initial.png", width=400, height=300)
 wordcloud(words = d$word, freq = d$freq, min.freq = 1,
           max.words=200, random.order=FALSE, rot.per=0.35, 
           colors=brewer.pal(8, "Dark2"))
+dev.off()
+
+
 
 ```
 
@@ -137,7 +141,7 @@ wss <- 2:31
 for (i in 2:31){
   wss[i] <- sum(kmeans(dsi_m,centers=i,nstart=25)$withinss)}
 
-png("elbow_plot.png", width=800, height=600)
+png("elbow_plot.png", width=400, height=300)
 plot(2:31, wss[2:31], type="b", xlab="Number of Clusters", ylab="Within groups sum of squares",
 main="DSI Clusters")
 dev.off()
