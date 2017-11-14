@@ -154,7 +154,7 @@ clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
 dev.off()
 
 
-dsikfit <- kmeans(dsi_m, 6) # Creating clusters
+dsikfit <- kmeans(dsi_m, 3) # Creating clusters
 
 png("cluster_distplot_sp.png", width=800, height=600)
 clusplot(as.matrix(dsi_m), dsikfit$cluster, color=T, shade=T,
